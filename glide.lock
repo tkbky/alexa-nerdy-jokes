@@ -1,0 +1,14 @@
+hash: 7b7fb54237287381c9a450cb354d253ae1a8025ebc938b69e3897ad64db47cd5
+updated: 2017-01-21T21:38:33.214245008+08:00
+imports:
+- name: github.com/codegangsta/negroni
+  version: b0a6f4500e67c3e53f2d1563cca1563ab9777533
+- name: github.com/gorilla/context
+  version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/gorilla/mux
+  version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/mikeflynn/go-alexa
+  version: ca9bde7854923bcf74f5e1591d6d1a596492bb6f
+  subpackages:
+  - skillserver
+testImports: []

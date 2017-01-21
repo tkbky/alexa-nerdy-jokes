@@ -1,0 +1,5 @@
+package: main
+import:
+- package: github.com/mikeflynn/go-alexa
+  subpackages:
+  - skillserver

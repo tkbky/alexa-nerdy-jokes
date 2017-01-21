@@ -1,0 +1,2 @@
+TellAJoke Tell me a nerdy joke
+TellAJoke I want some nerdy jokes
