@@ -1,4 +1,4 @@
-package: main
+package: alexa-nerdy-jokes
 import:
 - package: github.com/mikeflynn/go-alexa
   subpackages:
