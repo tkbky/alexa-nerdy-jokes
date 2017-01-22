@@ -1,1 +1,1 @@
-web: bin/main
+web: bin/alexa-nerdy-jokes
