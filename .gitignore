@@ -36,6 +36,5 @@ bin/
 # Ignore SSL
 ssl/
 
-alexa-nerdy-jokes
-
+/.GOPATH
 # End of https://www.gitignore.io/api/go
