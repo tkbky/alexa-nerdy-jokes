@@ -1,7 +1,7 @@
 {
   "intents": [
     {
-      "intent": "TellAJoke",
+      "intent": "TellANerdyJoke",
       "slots": []
     }
   ]
