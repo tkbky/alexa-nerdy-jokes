@@ -65,7 +65,7 @@ func unknownResponse() *alexa.EchoResponse {
 }
 
 func launchResponse() *alexa.EchoResponse {
-	return alexa.NewEchoResponse().OutputSpeech("Hi, I'm Newton. I tell nerdy jokes.").EndSession(true)
+	return alexa.NewEchoResponse().OutputSpeech("Hi, I'm Nerdy Joker. I tell nerdy jokes.").EndSession(true)
 }
 
 func nerdyJokeResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
