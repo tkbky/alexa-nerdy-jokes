@@ -1,2 +1,23 @@
 TellANerdyJoke Tell me a nerdy joke
-TellANerdyJoke I want some nerdy jokes
+TellANerdyJoke Tell me a joke
+TellANerdyJoke Tell a joke
+TellANerdyJoke Tell a nerdy joke
+TellANerdyJoke Tell nerdy joke
+TellANerdyJoke Give me a nerdy joke
+TellANerdyJoke Give me a joke
+TellANerdyJoke Give a joke
+TellANerdyJoke Give a nerdy joke
+TellANerdyJoke Get me a nerdy joke
+TellANerdyJoke Get me a joke
+TellANerdyJoke Get a joke
+TellANerdyJoke Get a nerdy joke
+TellANerdyJoke Tell me some nerdy jokes
+TellANerdyJoke Tell me some jokes
+TellANerdyJoke Tell some jokes
+TellANerdyJoke Tell jokes
+TellANerdyJoke Give me some nerdy jokes
+TellANerdyJoke Give me some jokes
+TellANerdyJoke Give some jokes
+TellANerdyJoke Get me some nerdy jokes
+TellANerdyJoke Get me some jokes
+TellANerdyJoke Get some jokes
