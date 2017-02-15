@@ -5,6 +5,10 @@
       "slots": []
     },
     {
+      "intent": "AMAZON.HelpIntent",
+      "slots": []
+    },
+    {
       "intent": "HelpReply",
       "slots": [
         {
