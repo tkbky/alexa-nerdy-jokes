@@ -3,6 +3,15 @@
     {
       "intent": "TellANerdyJoke",
       "slots": []
+    },
+    {
+      "intent": "HelpReply",
+      "slots": [
+        {
+          "name": "Want",
+          "type": "LITERAL"
+        }
+      ]
     }
   ]
 }

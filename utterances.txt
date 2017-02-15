@@ -21,3 +21,9 @@ TellANerdyJoke Give some jokes
 TellANerdyJoke Get me some nerdy jokes
 TellANerdyJoke Get me some jokes
 TellANerdyJoke Get some jokes
+HelpReply {yes|Want}
+HelpReply {yes|Want} why not
+HelpReply {sure|Want}
+HelpReply {sure|Want} why not
+HelpReply {no|Want}
+HelpReply {no|Want} Thanks

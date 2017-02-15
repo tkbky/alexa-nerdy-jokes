@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	alexa "github.com/mikeflynn/go-alexa/skillserver"
@@ -53,6 +54,12 @@ func NerdyJokesHandler(w http.ResponseWriter, r *http.Request) {
 		case "TellANerdyJoke":
 			echoResp := nerdyJokeResponse(echoReq)
 			handleResponse(w, echoResp)
+		case "HelpReply":
+			echoResp := helpReply(echoReq)
+			handleResponse(w, echoResp)
+		case "AMAZON.HelpIntent":
+			echoResp := helpResponse(echoReq)
+			handleResponse(w, echoResp)
 		default:
 			echoResp := unknownResponse()
 			handleResponse(w, echoResp)
@@ -66,6 +73,23 @@ func unknownResponse() *alexa.EchoResponse {
 
 func launchResponse() *alexa.EchoResponse {
 	return alexa.NewEchoResponse().OutputSpeech("Hi, I'm Nerdy Joker. Ask me for a nerdy joke.").EndSession(false)
+}
+
+func helpResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
+	return alexa.NewEchoResponse().OutputSpeech("Hi, you can ask me for a nerdy joke by saying \"Tell me a joke\". Do you want a joke now?").EndSession(false)
+}
+
+func helpReply(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
+	want, err := echoReq.GetSlotValue("Want")
+	if err != nil {
+		return unknownResponse()
+	}
+
+	if strings.ToLower(want) == "yes" {
+		return nerdyJokeResponse(echoReq)
+	}
+
+	return alexa.NewEchoResponse().OutputSpeech("Alright, have a nice day!").EndSession(true)
 }
 
 func nerdyJokeResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
