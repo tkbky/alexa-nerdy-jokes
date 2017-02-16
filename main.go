@@ -76,16 +76,24 @@ func launchResponse() *alexa.EchoResponse {
 }
 
 func helpResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
-	return alexa.NewEchoResponse().OutputSpeech("Hi, you can ask me for a nerdy joke by saying \"Tell me a joke\". Do you want a joke now?").EndSession(false)
+	return alexa.NewEchoResponse().OutputSpeech("You can ask me for a nerdy joke by saying \"Tell me a joke\". Do you want a joke now?").EndSession(false)
+}
+
+var Yeses = map[string]bool{
+	"yes":  true,
+	"sure": true,
 }
 
 func helpReply(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
 	want, err := echoReq.GetSlotValue("Want")
+
 	if err != nil {
 		return unknownResponse()
 	}
 
-	if strings.ToLower(want) == "yes" {
+	_, ok := Yeses[strings.ToLower(want)]
+
+	if ok {
 		return nerdyJokeResponse(echoReq)
 	}
 
