@@ -36,5 +36,8 @@ bin/
 # Ignore SSL
 ssl/
 
+# Ignore vendor
+vendor/
+
 /.GOPATH
 # End of https://www.gitignore.io/api/go
