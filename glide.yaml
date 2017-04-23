@@ -4,3 +4,4 @@ import:
   subpackages:
   - skillserver
 - package: github.com/lib/pq
+- package: github.com/jmoiron/sqlx

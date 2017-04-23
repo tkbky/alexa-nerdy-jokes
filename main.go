@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"log"
 	"math/rand"
 	"net/http"
@@ -9,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 
 	alexa "github.com/mikeflynn/go-alexa/skillserver"
@@ -33,7 +33,15 @@ var applications = map[string]interface{}{
 	},
 }
 
-var db *sql.DB
+var db *sqlx.DB
+
+// Joke that is good needs no explain
+type Joke struct {
+	ID        string `db:"id"`
+	Content   string `db:"content"`
+	CreatedAt string `db:"created_at"`
+	UpdatedAt string `db:"updated_at"`
+}
 
 func main() {
 	var err error
@@ -44,13 +52,13 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	db, err = sqlx.Open("postgres", os.Getenv("DATABASE_URL"))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS jokes (id SERIAL NOT NULL PRIMARY KEY, content text NOT NULL, created_at timestamp DEFAULT CURRENT_TIMESTAMP, updated_at timestamp DEFAULT CURRENT_TIMESTAMP)")
+	db.MustExec("CREATE TABLE IF NOT EXISTS jokes (id SERIAL NOT NULL PRIMARY KEY, content text NOT NULL, created_at timestamp DEFAULT CURRENT_TIMESTAMP, updated_at timestamp DEFAULT CURRENT_TIMESTAMP)")
 
 	if err != nil {
 		log.Fatal(err)
@@ -58,38 +66,28 @@ func main() {
 
 	var count int
 
-	err = db.QueryRow("SELECT COUNT(id) FROM jokes").Scan(&count)
+	err = db.Get(&count, "SELECT COUNT(id) FROM jokes")
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if count <= 0 {
-		for _, joke := range nerdyJokes {
-			seedDB(db, joke)
-		}
+		seedJokes()
 	}
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	alexa.Run(applications, port)
 }
 
-func seedDB(db *sql.DB, joke string) {
-	var stmt *sql.Stmt
-	var err error
+func seedJokes() {
+	tx := db.MustBegin()
 
-	stmt, err = db.Prepare("INSERT INTO jokes(content) VALUES($1)")
-	defer stmt.Close()
-
-	if err != nil {
-		log.Fatal(err)
+	for _, joke := range nerdyJokes {
+		tx.MustExec("INSERT INTO jokes(content) VALUES($1)", joke)
 	}
 
-	_, err = stmt.Exec(joke)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	tx.Commit()
 }
 
 // NerdyJokesHandler tells some nerdy jokes
@@ -155,7 +153,7 @@ func helpReply(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
 func nerdyJokeResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
 	var content string
 
-	err := db.QueryRow("SELECT content FROM jokes WHERE jokes.id = $1", rand.Intn(len(nerdyJokes))).Scan(&content)
+	err := db.Get(&content, "SELECT content FROM jokes WHERE jokes.id = $1", rand.Intn(len(nerdyJokes)))
 
 	if err != nil {
 		log.Fatal(err)
