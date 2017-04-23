@@ -1,12 +1,15 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"math/rand"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	_ "github.com/lib/pq"
 
 	alexa "github.com/mikeflynn/go-alexa/skillserver"
 )
@@ -30,15 +33,63 @@ var applications = map[string]interface{}{
 	},
 }
 
+var db *sql.DB
+
 func main() {
+	var err error
+
 	port := os.Getenv("PORT")
 
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
 
+	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS jokes (id SERIAL NOT NULL PRIMARY KEY, content text NOT NULL, created_at timestamp DEFAULT CURRENT_TIMESTAMP, updated_at timestamp DEFAULT CURRENT_TIMESTAMP)")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var count int
+
+	err = db.QueryRow("SELECT COUNT(id) FROM jokes").Scan(&count)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if count <= 0 {
+		for _, joke := range nerdyJokes {
+			seedDB(db, joke)
+		}
+	}
+
 	rand.Seed(time.Now().UTC().UnixNano())
 	alexa.Run(applications, port)
+}
+
+func seedDB(db *sql.DB, joke string) {
+	var stmt *sql.Stmt
+	var err error
+
+	stmt, err = db.Prepare("INSERT INTO jokes(content) VALUES($1)")
+	defer stmt.Close()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = stmt.Exec(joke)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // NerdyJokesHandler tells some nerdy jokes
@@ -79,6 +130,7 @@ func helpResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
 	return alexa.NewEchoResponse().OutputSpeech("You can ask me for a nerdy joke by saying \"Tell me a joke\". Do you want a joke now?").EndSession(false)
 }
 
+// Yeses are different words for acknowledgement
 var Yeses = map[string]bool{
 	"yes":  true,
 	"sure": true,
@@ -101,8 +153,15 @@ func helpReply(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
 }
 
 func nerdyJokeResponse(echoReq *alexa.EchoRequest) *alexa.EchoResponse {
-	joke := nerdyJokes[rand.Intn(len(nerdyJokes))]
-	return alexa.NewEchoResponse().OutputSpeech(joke).EndSession(true)
+	var content string
+
+	err := db.QueryRow("SELECT content FROM jokes WHERE jokes.id = $1", rand.Intn(len(nerdyJokes))).Scan(&content)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return alexa.NewEchoResponse().OutputSpeech(content).EndSession(true)
 }
 
 func handleResponse(w http.ResponseWriter, echoResp *alexa.EchoResponse) {
