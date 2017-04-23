@@ -1,5 +1,7 @@
-package: alexa-nerdy-jokes
+package: github.com/tkbky/alexa-nerdy-jokes
 import:
 - package: github.com/mikeflynn/go-alexa
   subpackages:
   - skillserver
+- package: github.com/lib/pq
+- package: github.com/jmoiron/sqlx

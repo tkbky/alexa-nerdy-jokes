@@ -1,5 +1,5 @@
-hash: 95b4c681225f81d7611d23e63493ebb5fa439877f87fb8104c1b31b5862ede0e
-updated: 2017-01-22T21:01:58.690716355+08:00
+hash: 669a1d95926fc3c12716d60086808a3c7cfd425cf0e7ab1da225322d141ed51a
+updated: 2017-04-23T08:56:44.685276816+08:00
 imports:
 - name: github.com/codegangsta/negroni
   version: b0a6f4500e67c3e53f2d1563cca1563ab9777533
@@ -7,6 +7,12 @@ imports:
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - name: github.com/gorilla/mux
   version: 392c28fe23e1c45ddba891b0320b3b5df220beea
+- name: github.com/jmoiron/sqlx
+  version: 3564e3a314b957a161fefa0e7aea85b4d741c94e
+- name: github.com/lib/pq
+  version: 2704adc878c21e1329f46f6e56a1c387d788ff94
+  subpackages:
+  - oid
 - name: github.com/mikeflynn/go-alexa
   version: ca9bde7854923bcf74f5e1591d6d1a596492bb6f
   subpackages:
