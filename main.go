@@ -43,6 +43,14 @@ type Joke struct {
 	UpdatedAt string `db:"updated_at"`
 }
 
+var schema = `
+CREATE TABLE IF NOT EXISTS jokes (
+	id SERIAL NOT NULL PRIMARY KEY,
+	content text NOT NULL,
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+	updated_at timestamp DEFAULT CURRENT_TIMESTAMP
+);`
+
 func main() {
 	var err error
 
@@ -58,7 +66,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db.MustExec("CREATE TABLE IF NOT EXISTS jokes (id SERIAL NOT NULL PRIMARY KEY, content text NOT NULL, created_at timestamp DEFAULT CURRENT_TIMESTAMP, updated_at timestamp DEFAULT CURRENT_TIMESTAMP)")
+	db.MustExec(schema)
 
 	if err != nil {
 		log.Fatal(err)
